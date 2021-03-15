@@ -7,7 +7,7 @@ windows = Tk()
 windows.title("Nom de l'applicationr")
 windows.geometry("1080x720")
 windows.minsize(1080,720)
-windows.iconbitmap("")
+windows.iconbitmap("bank.ico")
 windows.config(background='#E10BB1')
 
 #crer frame principale
