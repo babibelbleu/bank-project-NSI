@@ -33,11 +33,11 @@ nom_entry2 = Entry(frame, font = ("Comic sans MS", 20),show='*' ,bg = '#41B77F',
 nom_entry2.pack()
 
 #création bouton connexion
-button = Button(frame, text = "connexion", font = ("Comic sans MS", 20), bg = 'white', fg = '#41B77F', activeforeground= '#41B77F')
+button = Button(frame, text = "connexion", font = ("Comic sans MS", 20), bg = '#007FFF', fg = '#40E0D0', activeforeground= '#40E0D0',activebackground='#007FFF', bd = '1')
 button.pack(pady = 5)
 
 ##création bouton connexion
-button1 = Button(frame, text = "se créer un compte", font = ("Comic sans MS", 20), bg = 'white', fg = '#41B77F', activeforeground= '#41B77F')
+button1 = Button(frame, text = "se créer un compte", font = ("Comic sans MS", 20), bg = '#007FFF', fg = '#40E0D0', activeforeground= '#40E0D0',activebackground='#007FFF', bd = '1')
 button1.pack(pady= 5)
 
 #Ajout frame principale
