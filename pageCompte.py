@@ -38,32 +38,32 @@ class Compte(tk.Tk):
         #crétion du truc pour demander la date de naissance
         self.label = tk.Label(self.frame, text = "jour", 
                 font = ("Comic sans MS", 15), bg ='#41B77F')         
-        self.label.grid(row = 5, column = 0)
+        self.label.grid(row = 5, column = 0, sticky = "W")
         self.label = tk.Label(self.frame, text = "mois", 
                 font = ("Comic sans MS", 15), bg ='#41B77F')         
-        self.label.grid(row = 5, column = 1)
+        self.label.grid(row = 5, column = 0)
         self.label = tk.Label(self.frame, text = "année", 
                 font = ("Comic sans MS", 15), bg ='#41B77F')         
-        self.label.grid(row = 5, column = 2)
+        self.label.grid(row = 5, column = 0, sticky ="E")
 
         #mois
         self.mois = tk.Listbox(self.frame, font = ("Comic sans MS", 15),
                 height=3, width = 3)
         for values in range(12):
             self.mois.insert(values,values+1)
-            self.mois.grid(row = 6, column = 1)
+            self.mois.grid(row = 6, column = 0)
         #jour
         self.jour = tk.Listbox(self.frame, font = ("Comic sans MS", 15),
                 height=3, width = 3)
         for values in range (31):
             self.jour.insert(values,values+1)
-            self.jour.grid(row = 6, column = 0)
+            self.jour.grid(row = 6, column = 0, sticky = "W")
         #annee
         self.annee = tk.Listbox(self.frame ,font = ("Comic sans MS", 15),
                 height=3, width = 5)
         for values in range(1950,2021):
             self.annee.insert(values,values+1)
-            self.annee.grid(row = 6, column = 2)
+            self.annee.grid(row = 6, column = 0, sticky = "E")
             
         #zone de text nom
         
