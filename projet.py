@@ -1,9 +1,6 @@
 from tkinter import *
 
-#création des commandes de bouton connexion
-from tkinter import Tk
-
-
+#def qui créer page principales
 def page_compte():
     creation.destroy()
     global windows2
@@ -40,7 +37,7 @@ def page_compte():
     nom_entry_txt.pack()
 
     # creation de la zone de texte pour le nom
-    label_title_txt= Label(frame2, text="mot de passe", font=("Comic sans MS", 20), bg='#41B77F', bd=0,
+    label_title_txt = Label(frame2, text="mot de passe", font=("Comic sans MS", 20), bg='#41B77F', bd=0,
                          highlightthickness=0)
     label_title_txt.pack()
 
@@ -50,29 +47,94 @@ def page_compte():
 
     # création bouton connexion
     button_co = Button(frame2, text="connexion", font=("Comic sans MS", 20), bg='#007FFF', fg='#40E0D0',
-                    activeforeground='#40E0D0', activebackground='#007FFF', bd='1', command=page_compte)
+                    activeforeground='#40E0D0', activebackground='#007FFF', bd='1', command= page_connecté )
     button_co.pack(pady=5)
 
     # création bouton création compte
     button2 = Button(frame2, text="se créer un compte", font=("Comic sans MS", 20), bg='#007FFF', fg='#40E0D0',
-                     activeforeground='#40E0D0', activebackground='#007FFF', bd='1', command=creation_compte)
+                    activeforeground='#40E0D0', activebackground='#007FFF', bd='1', command=creation_compte)
     button2.pack(pady=5)
 
     # création bouton decoration
-    button_deco2 = Button(frame2, text="se créer un compte", font=("Comic sans MS", 20),
+    button_deco2 = Button(frame2, text="", font=("Comic sans MS", 20),
                     bg='#007FFF', fg='#40E0D0',activeforeground='#40E0D0', activebackground='#007FFF', bd=500)
     button_deco2.pack(pady=5)
 
     # Ajout frame principale
     frame2.pack(expand=YES)
 
+    windows2.mainloop()
 
-#créatio des commandes du bouton cration compte
+def page_compte2():
+    connecté.destroy()
+    global windows2
+    windows2 = Tk()
+    windows2.title("Bank Terminale scientifique")
+    windows2.geometry("1080x720")
+    windows2.minsize(1080, 720)
+    windows2.iconbitmap("")
+    windows2.config(bg='#41B77F')
+
+    # creer frame principale
+    frame2 = Frame(windows2, bg='#41B77F')
+
+    # ajout slogan premiére page
+    label_slogan1 = Label(windows2, text="La banque de tous les lycéens sauf les Littéraires",
+                              font=("Damion", 20), bg='#41B77F')
+    label_slogan1.pack()
+
+    # création images
+    width2 = 100
+    height2 = 100
+    image2 = PhotoImage(file="data-science2.png").zoom(5).subsample(32)
+    canvas2 = Canvas(windows2, width=width2, height=height2, bg='#41B77F', bd=0, highlightthickness=0)
+    canvas2.create_image(width / 2, height / 2, image=image2)
+    canvas2.pack()
+
+    # crétion du demandeur de compte(nom utilisateur )
+    label_title_comp = Label(frame2, text="Nom utilisateur", font=("Comic sans MS", 20), bg='#41B77F', bd=0,
+                                 highlightthickness=0)
+    label_title_comp.pack()
+
+    # creation de la zone de texte pour le nom
+    nom_entry_txt = Entry(frame2, font=("Comic sans MS", 20), bg='#41B77F', fg='black')
+    nom_entry_txt.pack()
+
+    # creation de la zone de texte pour le nom
+    label_title_txt = Label(frame2, text="mot de passe", font=("Comic sans MS", 20), bg='#41B77F', bd=0,
+                                highlightthickness=0)
+    label_title_txt.pack()
+
+    # creation de la zone de texte pour le mot de passe
+    nom_entry_txt = Entry(frame2, font=("Comic sans MS", 20), show='*', bg='#41B77F', fg='black')
+    nom_entry_txt.pack()
+
+    #création bouton connexion
+    button_co = Button(frame2, text="connexion", font=("Comic sans MS", 20), bg='#007FFF', fg='#40E0D0',
+                           activeforeground='#40E0D0', activebackground='#007FFF', bd='1', command=page_compte)
+    button_co.pack(pady=5)
+
+    # création bouton création compte
+    button2 = Button(frame2, text="se créer un compte", font=("Comic sans MS", 20), bg='#007FFF', fg='#40E0D0',
+                         activeforeground='#40E0D0', activebackground='#007FFF', bd='1', command=creation_compte)
+    button2.pack(pady=5)
+
+    # création bouton decoration
+    button_deco2 = Button(frame2, text="", font=("Comic sans MS", 20),
+                              bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0', activebackground='#007FFF',
+                              bd=500)
+    button_deco2.pack(pady=5)
+
+    # Ajout frame principale
+    frame2.pack(expand=YES)
+
+    windows2.mainloop()
+
+#création des commandes du bouton creation compte
 def creation_compte():
     windows.destroy() # on détruit la page d'avant
     global creation
     creation = Tk()   #on en créer une nouvelle
-
     creation.title("Bank Terminale scientifique")
     creation.geometry("1080x720")
     creation.minsize(1080,720)
@@ -81,9 +143,8 @@ def creation_compte():
     
     # création de la frame principale
     frame1 = Frame(creation, bg = '#41B77F')
-    sous_frame1_gauche = Frame(frame1, bg = '#41B77F')
-    sous_frame1_droite = Frame(frame1, bg='#41B77F')
-    
+
+    bottomframe = Frame(creation, bg = '#41B77F')
 
     # ajout slogan prémiére page
     label_slogan2 = Label(creation, text="La banque de tous les lycéens sauf les Littéraires",
@@ -133,8 +194,6 @@ def creation_compte():
     mot_de_passe_entry_creation = Entry(creation, font=("Comic sans MS", 15), bg='#41B77F', fg='black',show='*')
     mot_de_passe_entry_creation.pack()
 
-
-
     #date de naissance
     texte_annee = Label(frame1, text="Année", bg='#41B77F', font=("Damion", 15))
     texte_annee.grid(row = 0, column = 0)
@@ -151,38 +210,79 @@ def creation_compte():
     label.pack()
     
     #crétion du truc pour demander la date de naissance
-    annee = Listbox(frame1, font = ("Comic sans MS", 15),height=3, width = 4)
+    annee = Listbox(frame1, font = ("Comic sans MS", 15),height=3, width = 4, selectmode = "multiple")
     for values in range(1970,2021):
         annee.insert(END,values)
     annee.grid(row= 1, column = 0)
 
-    mois = Listbox(frame1, font=("Comic sans MS", 15), height=3, width=3)
+    mois = Listbox(frame1, font=("Comic sans MS", 15), height=3, width=3,selectmode= "multiple")
     for values in range(12):
         mois.insert(END, values + 1)
     mois.grid(row=1, column=1)
 
-    jour = Listbox(frame1, font=("Comic sans MS", 15), height=3, width=3)
+    jour = Listbox(frame1, font=("Comic sans MS", 15), height=3, width=3,selectmode = "multiple")
     for values in range(31):
         jour.insert(END, values + 1)
     jour.grid(row=1, column=2)
 
     # création du bouton de retour en arriéres
-    button_retour = Button(sous_frame1_droite, text="retour",
-                           font=("Comic sans MS", 10),
+    button_suite = Button(bottomframe, text="retour",
+                           font=("Comic sans MS", 15),
                            bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0',
                            activebackground='#007FFF', bd='1', command=page_compte)
-    button_retour.pack()
+    button_suite.pack(side = RIGHT)
 
     # création du bouton création du comte
-    button_retour = Button(sous_frame1_gauche, text="créer un compte",
-                           font=("Comic sans MS", 10),
+    button_retour = Button(bottomframe, text="créer un compte",
+                           font=("Comic sans MS", 15),
                            bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0',
                            activebackground='#007FFF', bd='1')
-    button_retour.pack()
+    button_retour.pack( side = LEFT )
 
     frame1.pack()
-    sous_frame1_gauche.grid(row=3, column = 0)
-    sous_frame1_droite.grid(row=3, column = 2)
+    bottomframe.pack(pady = 9)
+
+    creation.mainloop()
+
+#création page quand on est connecté
+def page_connecté():
+    windows.destroy()  # on détruit la page d'avant
+    global connecté
+    connecté = Tk()  # on en créer une nouvelle
+    connecté.title("Bank Terminale scientifique")
+    connecté.geometry("1080x720")
+    connecté.minsize(1080, 720)
+    connecté.iconbitmap("")
+    connecté.config(background='#41B77F')
+
+    frame_menu = Frame(connecté, bg='#41B77F')
+
+    #création bouton pour menu
+    button_deconnexion = Button(connecté, text="deconnexion",
+                           font=("Comic sans MS", 15),
+                           bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0',
+                           activebackground='#007FFF', bd='1', command=page_compte2)
+    button_deconnexion.place(x = 947, y = 0)
+
+    button_depense = Button(frame_menu, text="depense",
+                                font=("Comic sans MS", 25),
+                                bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0',
+                                activebackground='#007FFF',bd = 5)
+    button_depense.grid(row = 0,column = 2, padx = 3)
+
+    button_infoperso = Button(frame_menu, text="information personnelle",
+                                font=("Comic sans MS", 25),
+                                bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0',
+                                activebackground='#007FFF', bd = 5)
+    button_infoperso.grid(row = 0,column = 1, padx = 3 )
+
+    button_ = Button(frame_menu, text ="",font=("Comic sans MS", 25),
+                                bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0',
+                                activebackground='#007FFF', bd = 5)
+    button_.grid(row = 0,column = 0, padx = 3 )
+
+    frame_menu.pack(pady = 50)
+    connecté.mainloop()
 
 #------------------------------------------------------------------------------------------------------------------------
 #page principale
@@ -235,7 +335,7 @@ nom_entry2.pack()
 #création bouton connexion
 button = Button(frame, text = "connexion", font = ("Comic sans MS", 20), bg = '#007FFF',
                 fg = '#40E0D0', activeforeground= '#40E0D0',activebackground='#007FFF', bd = '1',
-                command = page_compte)
+                command = page_connecté)
 button.pack(pady = 5)
 
 #création bouton création compte
