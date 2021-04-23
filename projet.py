@@ -1,13 +1,29 @@
 from tkinter import *
+from tkinter import ttk
 
-
-# fonction pour supprimer tout les widget d'un page
+# functions pour supprimer tout les widget d'un page
 from tkinter import Entry, Frame
+
+
+def info():
+    pass
 
 
 def effacer():
     for widget in frame.winfo_children():
         widget.destroy()
+
+
+def selected_mois():
+    Label(frame, text=combobox_mois.get()).pack()
+
+
+def selected_annee():
+    Label(frame, text=combobox_annee.get()).pack()
+
+
+def selected_jour():
+    Label(frame, text=combobox_annee.get()).pack()
 
 
 # def qui créer page principales
@@ -141,27 +157,41 @@ def creation_compte():
     texte_jour.grid(row=0, column=2)
 
     # crétion du truc pour demander la date de naissance
-    annee = Listbox(frame_crea2, font=("Comic sans MS", 15), height=3, width=4, selectmode="multiple")
-    for values in range(1970, 2021):
-        annee.insert(END, values)
-    annee.grid(row=1, column=0)
+    annee = ["1970", "1971", "1972", "1973", "1974", "1975", "1976", "1977", "1978", "1979", "1980", "1981", "1982",
+             "1983",
+             "1984", "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994", "1995", "1996",
+             "1997",
+             "19998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010",
+             "2011",
+             "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", ]
+    combobox_annee = ttk.Combobox(frame_crea2, value=annee)
+    combobox_annee.current(0)
+    combobox_annee.bind("<<CombobocSelected>>", selected_annee)
+    combobox_annee.grid(row=1, column=0)
 
-    mois = Listbox(frame_crea2, font=("Comic sans MS", 15), height=3, width=3, selectmode="multiple")
-    for values in range(12):
-        mois.insert(END, values + 1)
-    mois.grid(row=1, column=1)
+    mois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre",
+            "Decembre"]
 
-    jour = Listbox(frame_crea2, font=("Comic sans MS", 15), height=3, width=3, selectmode="multiple")
-    for values in range(31):
-        jour.insert(END, values + 1)
-    jour.grid(row=1, column=2)
+    combobox_mois = ttk.Combobox(frame_crea2, value=mois)
+    combobox_mois.current(0)
+    combobox_mois.bind("<<ComboboxSelected>>", selected_mois)
+    combobox_mois.grid(row=1, column=1)
+
+    jour = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
+            "20", "21",
+            "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
+
+    combobox_jour = ttk.Combobox(frame_crea2, value=jour)
+    combobox_jour.current(0)
+    combobox_jour.bind("<<ComboboxSelected>>", selected_jour)
+    combobox_jour.grid(row=1, column=2)
 
     # création du bouton de retour en arriéres
     button_retour = Button(bottomframe, text="retour",
                            font=("Comic sans MS", 15),
                            bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0',
                            activebackground='#007FFF', bd='1', command=lambda: [effacer(), page_compte()])
-    button_retour.pack(side=RIGHT)
+    button_retour.pack(side=RIGHT, padx=5)
 
     # création du bouton création du comte
     button_suite = Button(bottomframe, text="créer un compte",
@@ -179,36 +209,30 @@ def creation_compte():
 
 # création page quand on est connecté
 def page_connecte():
-    frame_menu = Frame(frame, bg='#41B77F')
-    frame_deco = Frame(frame, bg='#41B77F')
 
-    # création bouton pour menu
-    button_deconnexion = Button(frame_deco, text="deconnexion",
-                                font=("Comic sans MS", 15),
-                                bg='#007FFF', fg='black', activeforeground='#40E0D0',
-                                activebackground='#007FFF', bd='1', command=lambda: [effacer(), page_compte()])
-    button_deconnexion.place(x=947, y=0)
+    # création  menu
+    mon_menu = Menu(windows)
+    windows.config(menu=mon_menu, bg='#41B77F')
+    file_menu = Menu(mon_menu)
+    mon_menu.add_cascade(label="info perso", menu=file_menu)
+    file_menu.add_command(label="Truc", command=info)
 
-    button_depense = Button(frame_menu, text="depense",
-                            font=("Comic sans MS", 25),
-                            bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0',
-                            activebackground='#007FFF', bd=5)
-    button_depense.grid(row=0, column=2, padx=3)
+def connecté():
 
-    button_infoperso = Button(frame_menu, text="information personnelle",
-                              font=("Comic sans MS", 25),
-                              bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0',
-                              activebackground='#007FFF', bd=5)
-    button_infoperso.grid(row=0, column=1, padx=3)
+    label_connecté = Label(frame, text="La banque de tous les lycéens sauf les Littéraires",
+                       font=("Damion", 20), bg='#41B77F')
+    label_connecté.pack()
 
-    button_menu = Button(frame_menu, text="", font=("Comic sans MS", 25),
-                         bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0',
-                         activebackground='#007FFF', bd=5)
-    button_menu.grid(row=0, column=0, padx=3)
+    width_root = 100
+    height_root = 100
+    image_root = PhotoImage(file="data-science.png").zoom(5).subsample(32)
+    canvas_root = Canvas(frame, width=width_root, height=height_root, bg='#41B77F', bd=0, highlightthickness=0)
+    canvas_root.create_image(width / 2, height / 2, image=image_root)
+    canvas_root.pack()
 
-    frame_deco.pack()
-    frame_menu.pack(pady=50)
 
+
+    frame.pack()
     windows.mainloop()
 
 
@@ -221,10 +245,11 @@ windows.title("Bank Terminale scientifique")
 windows.geometry("1080x720")
 windows.minsize(1080, 720)
 windows.iconbitmap("")
-windows.config(background='#41B77F')
+windows.config(bg='#41B77F')
 
 # creer frame principale
 frame = Frame(windows, bg='#41B77F')
+frame2 = Frame(windows, bg='#41B77F')
 
 # ajout slogan prémiére page
 label_slogan = Label(frame, text="La banque de tous les lycéens sauf les Littéraires",
@@ -261,7 +286,7 @@ nom_entry2.pack()
 button = Button(frame, text="connexion", font=("Comic sans MS", 20), bg='#007FFF',
 
                 fg='#40E0D0', activeforeground='#40E0D0', activebackground='#007FFF', bd='1',
-                command=lambda: [effacer(), page_connecte()])
+                command=lambda: [effacer(), page_connecte(),connecté()])
 button.pack(pady=5)
 
 # création bouton création compte
@@ -276,7 +301,8 @@ button_decoration = Button(frame, text="se créer un compte", font=("Comic sans 
 button_decoration.pack(pady=5)
 
 # Ajout frame principale
-frame.pack(expand=YES)
+frame.pack()
+frame2.pack()
 
 # afficher
 windows.mainloop()
