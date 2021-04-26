@@ -1,32 +1,37 @@
+# Projet de NSI e terminale 2021 Quentin Kimppienne, Bodin Bastien
+# Projet : création d'une fausse application bancaire ave une monnai fictive
+
 from tkinter import *
 from tkinter import ttk
-
-# functions pour supprimer tout les widget d'un page
 from tkinter import Entry, Frame
 
 
-def info():
-    pass
-
-
+# functions pour supprimer tout les widget d'un page
 def effacer():
     for widget in frame.winfo_children():
         widget.destroy()
 
+def delete():
+    mon_menu.delete("Information personnelle")
+    mon_menu.delete("Compte")
+    mon_menu.delete("Paramêtre")
 
+# fonction pour definir la colonne pour choisir le moi de sa date de naissance
 def selected_mois():
     Label(frame, text=combobox_mois.get()).pack()
 
 
+# fonction pour definir la colonne pour choisir l'annee de sa date de naissance
 def selected_annee():
     Label(frame, text=combobox_annee.get()).pack()
 
 
+# fonction pour definir la colonne pour choisir le jour de sa date de naissance
 def selected_jour():
     Label(frame, text=combobox_annee.get()).pack()
 
 
-# def qui créer page principales
+# fonction pour créer page principales
 def page_compte():
     # creer frame principale
     frame1 = Frame(frame, bg='#41B77F')
@@ -65,7 +70,7 @@ def page_compte():
     # création bouton connexion
     button_co = Button(frame1, text="connexion", font=("Comic sans MS", 20), bg='#007FFF',
                        fg='#40E0D0', activeforeground='#40E0D0', activebackground='#007FFF', bd='1',
-                       command=lambda: [effacer(), page_connecte()])
+                       command=lambda: [effacer(), page_connecte(),connecté()])
     button_co.pack(pady=5)
 
     # création bouton création compte
@@ -87,7 +92,7 @@ def page_compte():
     windows.mainloop()
 
 
-# création des commandes du bouton creation compte
+# fonction pour créer la page ou l'on peut créer son compte
 def creation_compte():
     # création de la frame principale
     frame_crea = Frame(frame, bg='#41B77F')
@@ -197,7 +202,7 @@ def creation_compte():
     button_suite = Button(bottomframe, text="créer un compte",
                           font=("Comic sans MS", 15),
                           bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0',
-                          activebackground='#007FFF', bd='1')
+                          activebackground='#007FFF', bd='1', command = lambda :[effacer(),page_connecte(),connecté()])
     button_suite.pack(side=LEFT)
 
     frame_crea.pack(expand=YES)
@@ -207,20 +212,75 @@ def creation_compte():
     windows.mainloop()
 
 
-# création page quand on est connecté
-def page_connecte():
+# fonction pour créer la pag du compte sur laquelle se trouve les info perso
+def info():
+    label_nom = Label(frame,text="Information a rajouter plus tard",
+                           font=("Damion", 20), bg='#41B77F' )
+    label_nom.pack()
 
-    # création  menu
+def compte():
+    label_compte = Label(frame, text="Montant du compte a rajouter",
+                           font=("Damion", 20), bg='#41B77F')
+    label_compte.pack()
+
+def depense():
+    label_receveur = Label(frame, text="Nom de la personne a qui envoyé de l'argent",
+                           font=("Damion",20),bg='#41B77F' )
+    label_receveur.pack()
+
+    nom_entry_receveur = Entry(frame, font=("Comic sans MS", 20), bg='#41B77F', fg='black')
+    nom_entry_receveur.pack()
+
+    label_code = Label(frame, text="Identifiant du compte",
+                           font=("Damion",20),bg='#41B77F' )
+    label_code.pack()
+
+    nom_entry_code = Entry(frame, font=("Comic sans MS", 20), bg='#41B77F', fg='black')
+    nom_entry_code.pack()
+
+    label_montant = Label(frame, text="Montant",
+                         font=("Damion",20),bg='#41B77F')
+    label_montant.pack()
+
+    nom_entry_montant = Entry(frame, font=("Comic sans MS", 20), bg='#41B77F', fg='black')
+    nom_entry_montant.pack()
+
+    button_envoie = Button(frame, text="Envoyer", font=("Comic sans MS", 20),
+                           bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0', activebackground='#007FFF' )
+    button_envoie.pack()
+
+def parametre():
+    label = Label(frame, text="Cette page servira a choisir la langue (francais, anglais, espagnol) ",
+                          font=("Damion", 20), bg='#41B77F')
+    label.pack()
+
+
+# fonction du menu sur la prémiére page du compte lots de la connexion
+def page_connecte():
+    global mon_menu
     mon_menu = Menu(windows)
     windows.config(menu=mon_menu, bg='#41B77F')
     file_menu = Menu(mon_menu)
-    mon_menu.add_cascade(label="info perso", menu=file_menu)
-    file_menu.add_command(label="Truc", command=info)
+    mon_menu.add_cascade(label="Information personnelle", menu=file_menu)
+    file_menu.add_command(label="Information personnelle", command=lambda: [effacer(), info()])
 
+    menu_depense = Menu(mon_menu)
+    mon_menu.add_cascade(label="Compte", menu=menu_depense)
+    menu_depense.add_command(label="Compte",command = lambda:[effacer(), compte()])
+    menu_depense.add_command(label="Dépense", command= lambda:[effacer(), depense()])
+
+    menu_deco = Menu(mon_menu)
+    mon_menu.add_cascade(label="Paramêtre", menu=menu_deco)
+    menu_deco.add_command(label="Paramêtre", command = lambda:[effacer(), parametre()])
+    menu_deco.add_command(label="Déconnexion", command= lambda:[effacer(),delete(),page_compte()])
+
+
+
+
+# fontion qui crée la frame de la premiere page du compte lors de la connexion
 def connecté():
-
     label_connecté = Label(frame, text="La banque de tous les lycéens sauf les Littéraires",
-                       font=("Damion", 20), bg='#41B77F')
+                           font=("Damion", 20), bg='#41B77F')
     label_connecté.pack()
 
     width_root = 100
@@ -230,7 +290,9 @@ def connecté():
     canvas_root.create_image(width / 2, height / 2, image=image_root)
     canvas_root.pack()
 
-
+    label_presentation = Label(frame, text="Bienvenue Monsieur ...", font=("Damion", 30),
+                               bg='#41B77F')
+    label_presentation.pack()
 
     frame.pack()
     windows.mainloop()
@@ -286,7 +348,7 @@ nom_entry2.pack()
 button = Button(frame, text="connexion", font=("Comic sans MS", 20), bg='#007FFF',
 
                 fg='#40E0D0', activeforeground='#40E0D0', activebackground='#007FFF', bd='1',
-                command=lambda: [effacer(), page_connecte(),connecté()])
+                command=lambda: [effacer(), page_connecte(), connecté()])
 button.pack(pady=5)
 
 # création bouton création compte
