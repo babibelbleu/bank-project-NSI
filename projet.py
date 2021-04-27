@@ -4,6 +4,7 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import Entry, Frame
+import time
 
 
 # functions pour supprimer tout les widget d'un page
@@ -11,10 +12,13 @@ def effacer():
     for widget in frame.winfo_children():
         widget.destroy()
 
+
+# fonction pour supprimer le menu
 def delete():
     mon_menu.delete("Information personnelle")
     mon_menu.delete("Compte")
     mon_menu.delete("Paramêtre")
+
 
 # fonction pour definir la colonne pour choisir le moi de sa date de naissance
 def selected_mois():
@@ -70,7 +74,7 @@ def page_compte():
     # création bouton connexion
     button_co = Button(frame1, text="connexion", font=("Comic sans MS", 20), bg='#007FFF',
                        fg='#40E0D0', activeforeground='#40E0D0', activebackground='#007FFF', bd='1',
-                       command=lambda: [effacer(), page_connecte(),connecté()])
+                       command=lambda: [effacer(), page_connecte(), connecte()])
     button_co.pack(pady=5)
 
     # création bouton création compte
@@ -202,7 +206,7 @@ def creation_compte():
     button_suite = Button(bottomframe, text="créer un compte",
                           font=("Comic sans MS", 15),
                           bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0',
-                          activebackground='#007FFF', bd='1', command = lambda :[effacer(),page_connecte(),connecté()])
+                          activebackground='#007FFF', bd='1', command=lambda: [effacer(), page_connecte(), connecte()])
     button_suite.pack(side=LEFT)
 
     frame_crea.pack(expand=YES)
@@ -214,44 +218,50 @@ def creation_compte():
 
 # fonction pour créer la pag du compte sur laquelle se trouve les info perso
 def info():
-    label_nom = Label(frame,text="Information a rajouter plus tard",
-                           font=("Damion", 20), bg='#41B77F' )
+    label_nom = Label(frame, text="Information a rajouter plus tard",
+                      font=("Damion", 20), bg='#41B77F')
     label_nom.pack()
 
+
+# fonction pour créer la page conenat les information sur le montant du compte
 def compte():
     label_compte = Label(frame, text="Montant du compte a rajouter",
-                           font=("Damion", 20), bg='#41B77F')
+                         font=("Damion", 20), bg='#41B77F')
     label_compte.pack()
 
+
+# fonction pour créer oa page pour envoyer de l'argent
 def depense():
     label_receveur = Label(frame, text="Nom de la personne a qui envoyé de l'argent",
-                           font=("Damion",20),bg='#41B77F' )
+                           font=("Damion", 20), bg='#41B77F')
     label_receveur.pack()
 
     nom_entry_receveur = Entry(frame, font=("Comic sans MS", 20), bg='#41B77F', fg='black')
     nom_entry_receveur.pack()
 
     label_code = Label(frame, text="Identifiant du compte",
-                           font=("Damion",20),bg='#41B77F' )
+                       font=("Damion", 20), bg='#41B77F')
     label_code.pack()
 
     nom_entry_code = Entry(frame, font=("Comic sans MS", 20), bg='#41B77F', fg='black')
     nom_entry_code.pack()
 
     label_montant = Label(frame, text="Montant",
-                         font=("Damion",20),bg='#41B77F')
+                          font=("Damion", 20), bg='#41B77F')
     label_montant.pack()
 
     nom_entry_montant = Entry(frame, font=("Comic sans MS", 20), bg='#41B77F', fg='black')
     nom_entry_montant.pack()
 
     button_envoie = Button(frame, text="Envoyer", font=("Comic sans MS", 20),
-                           bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0', activebackground='#007FFF' )
+                           bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0', activebackground='#007FFF')
     button_envoie.pack()
 
+
+# fonction pour créer la page servant a choisir la langue
 def parametre():
     label = Label(frame, text="Cette page servira a choisir la langue (francais, anglais, espagnol) ",
-                          font=("Damion", 20), bg='#41B77F')
+                  font=("Damion", 20), bg='#41B77F')
     label.pack()
 
 
@@ -266,36 +276,53 @@ def page_connecte():
 
     menu_depense = Menu(mon_menu)
     mon_menu.add_cascade(label="Compte", menu=menu_depense)
-    menu_depense.add_command(label="Compte",command = lambda:[effacer(), compte()])
-    menu_depense.add_command(label="Dépense", command= lambda:[effacer(), depense()])
+    menu_depense.add_command(label="Compte", command=lambda: [effacer(), compte()])
+    menu_depense.add_command(label="Dépense", command=lambda: [effacer(), depense()])
 
     menu_deco = Menu(mon_menu)
     mon_menu.add_cascade(label="Paramêtre", menu=menu_deco)
-    menu_deco.add_command(label="Paramêtre", command = lambda:[effacer(), parametre()])
-    menu_deco.add_command(label="Déconnexion", command= lambda:[effacer(),delete(),page_compte()])
-
-
+    menu_deco.add_command(label="Paramêtre", command=lambda: [effacer(), parametre()])
+    menu_deco.add_command(label="Déconnexion", command=lambda: [effacer(), delete(), page_compte()])
 
 
 # fontion qui crée la frame de la premiere page du compte lors de la connexion
-def connecté():
-    label_connecté = Label(frame, text="La banque de tous les lycéens sauf les Littéraires",
-                           font=("Damion", 20), bg='#41B77F')
-    label_connecté.pack()
+def connecte():
+    label_slogan1 = Label(frame, text="La banque de tous les lycéens sauf les Littéraires",
+                         font=("Damion", 20), bg='#41B77F')
+    label_slogan1.pack()
 
-    width_root = 100
-    height_root = 100
-    image_root = PhotoImage(file="data-science.png").zoom(5).subsample(32)
-    canvas_root = Canvas(frame, width=width_root, height=height_root, bg='#41B77F', bd=0, highlightthickness=0)
-    canvas_root.create_image(width / 2, height / 2, image=image_root)
-    canvas_root.pack()
+    width3 = 100
+    height3 = 100
+    image3 = PhotoImage(file='data-science.png').zoom(5).subsample(32)
+    canvas3 = Canvas(frame, width=width3, height=height3, bg='#41B77F', bd=0, highlightthickness=0)
+    canvas3.create_image(width / 2, height / 2, image=image3)
+    canvas3.pack()
 
-    label_presentation = Label(frame, text="Bienvenue Monsieur ...", font=("Damion", 30),
-                               bg='#41B77F')
-    label_presentation.pack()
+    label = Label(frame, text="Bienvenue Monsieur ...",
+                  font=("Damion", 35), bg='#41B77F')
+    label.pack()
 
-    frame.pack()
-    windows.mainloop()
+
+
+    #création d'une animation
+    can = Canvas(frame, height = 100, width = 1080,  bg='#41B77F', bd= 0 )
+    ball = can.create_oval(10, 10, 100, 100, fill='yellow')
+    can.pack(pady = 150)
+
+    flag = 0
+    while True:
+        if flag == 0:
+            for i in range(0,100):
+                time.sleep(0.06)
+                can.move(ball, 10, 0)
+                can.update()
+                flag = 1
+        else:
+            for i in range(0,100):
+                time.sleep(0.05)
+                can.move(ball, -10,0)
+                can.update()
+            flag = 0
 
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -321,7 +348,7 @@ label_slogan.pack()
 # création images
 width = 100
 height = 100
-image = PhotoImage(file="data-science.png").zoom(5).subsample(32)
+image = PhotoImage(file='data-science.png').zoom(5).subsample(32)
 canvas = Canvas(frame, width=width, height=height, bg='#41B77F', bd=0, highlightthickness=0)
 canvas.create_image(width / 2, height / 2, image=image)
 canvas.pack()
@@ -348,7 +375,7 @@ nom_entry2.pack()
 button = Button(frame, text="connexion", font=("Comic sans MS", 20), bg='#007FFF',
 
                 fg='#40E0D0', activeforeground='#40E0D0', activebackground='#007FFF', bd='1',
-                command=lambda: [effacer(), page_connecte(), connecté()])
+                command=lambda: [effacer(), page_connecte(), connecte()])
 button.pack(pady=5)
 
 # création bouton création compte
