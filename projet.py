@@ -2,7 +2,7 @@
 # Projet : création d'une fausse application bancaire ave une monnai fictive
 
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, Menu
 from tkinter import Entry, Frame
 import time
 
@@ -11,13 +11,6 @@ import time
 def effacer():
     for widget in frame.winfo_children():
         widget.destroy()
-
-
-# fonction pour supprimer le menu
-def delete():
-    mon_menu.delete("Information personnelle")
-    mon_menu.delete("Compte")
-    mon_menu.delete("Paramêtre")
 
 
 # fonction pour definir la colonne pour choisir le moi de sa date de naissance
@@ -33,6 +26,14 @@ def selected_annee():
 # fonction pour definir la colonne pour choisir le jour de sa date de naissance
 def selected_jour():
     Label(frame, text=combobox_annee.get()).pack()
+
+
+# -------------------------------------------------------------------------------------------------------------------------
+# Partie du code pour le compte en francais
+def delete():
+    mon_menu.delete("Information personnelle")
+    mon_menu.delete("Compte")
+    mon_menu.delete("Paramêtre")
 
 
 # fonction pour créer page principales
@@ -91,9 +92,6 @@ def page_compte():
 
     # Ajout frame principale
     frame1.pack(expand=YES)
-
-    # afficher
-    windows.mainloop()
 
 
 # fonction pour créer la page ou l'on peut créer son compte
@@ -213,8 +211,6 @@ def creation_compte():
     frame_crea2.pack()
     bottomframe.pack(pady=9)
 
-    windows.mainloop()
-
 
 # fonction pour créer la pag du compte sur laquelle se trouve les info perso
 def info():
@@ -260,9 +256,20 @@ def depense():
 
 # fonction pour créer la page servant a choisir la langue
 def parametre():
-    label = Label(frame, text="Cette page servira a choisir la langue (francais, anglais, espagnol) ",
+    label = Label(frame, text="Choix de la langue: ",
                   font=("Damion", 20), bg='#41B77F')
     label.pack()
+
+    button_francais = Button(frame, text='Francais', bg='#41B77F', font=("Comic sans MS", 15), )
+    button_francais.pack(pady=5)
+
+    button_anglais = Button(frame, text='Anglais', bg='#41B77F', font=("Comic sans MS", 15),
+                            command=lambda: [effacer(), delete(), menu_anglais(), parametre_anglais()])
+    button_anglais.pack(pady=5)
+
+    button_espagnol = Button(frame, text='Espagnol', bg='#41B77F', font=("Comic sans MS", 15),
+                             command=lambda: [effacer(), delete(), menu_espagnol(), parametre_espagnol()])
+    button_espagnol.pack(pady=5)
 
 
 # fonction du menu sur la prémiére page du compte lots de la connexion
@@ -288,7 +295,7 @@ def page_connecte():
 # fontion qui crée la frame de la premiere page du compte lors de la connexion
 def connecte():
     label_slogan1 = Label(frame, text="La banque de tous les lycéens sauf les Littéraires",
-                         font=("Damion", 20), bg='#41B77F')
+                          font=("Damion", 20), bg='#41B77F')
     label_slogan1.pack()
 
     width3 = 100
@@ -302,27 +309,113 @@ def connecte():
                   font=("Damion", 35), bg='#41B77F')
     label.pack()
 
-
-
-    #création d'une animation
-    can = Canvas(frame, height = 100, width = 1080,  bg='#41B77F', bd= 0 )
+    # création d'une animation
+    can = Canvas(frame, height=100, width=1080, bg='#41B77F', bd=0)
     ball = can.create_oval(10, 10, 100, 100, fill='yellow')
-    can.pack(pady = 150)
+    can.pack(pady=150)
 
     flag = 0
     while True:
         if flag == 0:
-            for i in range(0,100):
+            for i in range(0, 100):
                 time.sleep(0.06)
                 can.move(ball, 10, 0)
                 can.update()
                 flag = 1
         else:
-            for i in range(0,100):
+            for i in range(0, 100):
                 time.sleep(0.05)
-                can.move(ball, -10,0)
+                can.move(ball, -10, 0)
                 can.update()
             flag = 0
+
+
+# -------------------------------------------------------------------------------------------------------------------------
+# Partie du code pour le compte en Anglais
+def delete_anglais():
+    menu_anglais.delete("Personal information")
+    menu_anglais.delete("Account")
+    menu_anglais.delete("Settings")
+
+
+def parametre_anglais():
+    label_anglais = Label(frame, text="Choice of language: ",
+                          font=("Damion", 20), bg='#41B77F')
+    label_anglais.pack()
+
+    button_francais1 = Button(frame, text='French', bg='#41B77F', font=("Comic sans MS", 15),
+                              command=lambda: [effacer(), delete_anglais(), page_connecte(), parametre()])
+    button_francais1.pack(pady=5)
+
+    button_anglais1 = Button(frame, text='English', bg='#41B77F', font=("Comic sans MS", 15))
+    button_anglais1.pack(pady=5)
+
+    button_espagnol1 = Button(frame, text='Spanish', bg='#41B77F', font=("Comic sans MS", 15),
+                              command=lambda: [effacer(), delete_anglais(), menu_espagnol(), parametre_espagnol()])
+    button_espagnol1.pack(pady=5)
+
+
+def menu_anglais():
+    global menu_anglais
+    menu_anglais = Menu(windows)
+    windows.config(menu=menu_anglais, bg='#41B77F')
+    file_anglais = Menu(menu_anglais)
+    menu_anglais.add_cascade(label="Personal information", menu=file_anglais)
+    file_anglais.add_command(label="Personal information", command=lambda: [effacer(), info()])
+
+    menu_depense_anglais = Menu(menu_anglais)
+    menu_anglais.add_cascade(label="Account", menu=menu_depense_anglais)
+    menu_depense_anglais.add_command(label="Account", command=lambda: [effacer(), compte()])
+    menu_depense_anglais.add_command(label="Spent", command=lambda: [effacer(), depense()])
+
+    menu_deco_anglais = Menu(menu_anglais)
+    menu_anglais.add_cascade(label="Settings", menu=menu_deco_anglais)
+    menu_deco_anglais.add_command(label="Settings", command=lambda: [effacer(), parametre()])
+    menu_deco_anglais.add_command(label="Déconnexion", command=lambda: [effacer(), delete(), page_compte()])
+
+
+# -------------------------------------------------------------------------------------------------------------------------
+# Partie du code pour le compte en Espagnom
+def delete_espagnol():
+    menu_espagnol.delete("Informacion personal")
+    menu_espagnol.delete("Cuenta")
+    menu_espagnol.delete("Configuraciones")
+
+
+def parametre_espagnol():
+    label_espagnol = Label(frame, text="Datos personales: ",
+                           font=("Damion", 20), bg='#41B77F')
+    label_espagnol.pack()
+
+    button_francais2 = Button(frame, text='Francés', bg='#41B77F', font=("Comic sans MS", 15),
+                              command=lambda: [effacer(), delete_espagnol(), page_connecte(), parametre()])
+    button_francais2.pack(pady=5)
+
+    button_anglais2 = Button(frame, text='Inglés', bg='#41B77F', font=("Comic sans MS", 15),
+                             command=lambda: [effacer(), delete_espagnol(), menu_anglais(), parametre_anglais()])
+    button_anglais2.pack(pady=5)
+
+    button_espagnol2 = Button(frame, text='Español', bg='#41B77F', font=("Comic sans MS", 15))
+    button_espagnol2.pack(pady=5)
+
+
+def menu_espagnol():
+    global menu_espagnol
+    menu_espagnol = Menu(windows)
+    windows.config(menu=menu_espagnol, bg='#41B77F')
+    file_espagnol = Menu(menu_espagnol)
+    menu_espagnol.add_cascade(label="Informacion personal", menu=file_espagnol)
+    file_espagnol.add_command(label="informacion personal", command=lambda: [effacer(), info()])
+
+    menu_depense_espagnol = Menu(menu_espagnol)
+    menu_espagnol.add_cascade(label="Cuenta", menu=menu_depense_espagnol)
+    menu_depense_espagnol.add_command(label="cuenta", command=lambda: [effacer(), compte()])
+    menu_depense_espagnol.add_command(label="gasto", command=lambda: [effacer(), depense()])
+
+    menu_deco_espagnol = Menu(menu_espagnol)
+    menu_espagnol.add_cascade(label="Configuraciones", menu=menu_deco_espagnol)
+    menu_deco_espagnol.add_command(label="configuraciones", command=lambda: [effacer(), parametre()])
+    menu_deco_espagnol.add_command(label="desconexión", command=lambda: [effacer(), delete(), page_compte()])
 
 
 # ------------------------------------------------------------------------------------------------------------------------
