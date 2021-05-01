@@ -271,7 +271,6 @@ def parametre():
                              command=lambda: [effacer(), delete(), menu_espagnol(), parametre_espagnol()])
     button_espagnol.pack(pady=5)
 
-
 # fonction du menu sur la prémiére page du compte lots de la connexion
 def page_connecte():
     global mon_menu
@@ -310,24 +309,22 @@ def connecte():
     label.pack()
 
     # création d'une animation
-    can = Canvas(frame, height=100, width=1080, bg='#41B77F', bd=0)
-    ball = can.create_oval(10, 10, 100, 100, fill='yellow')
-    can.pack(pady=150)
+    can = Canvas(frame, height=400, width=1080, bg='#007FFF', bd=1)
+    can.pack(pady = 50)
+    can.create_rectangle(50,50,1030,350, fill='#0A0909')
+    ball = can.create_oval(100, 100, 150, 150, fill='yellow')
+    x = 1
+    y = 2
 
-    flag = 0
-    while True:
-        if flag == 0:
-            for i in range(0, 100):
-                time.sleep(0.06)
-                can.move(ball, 10, 0)
-                can.update()
-                flag = 1
-        else:
-            for i in range(0, 100):
-                time.sleep(0.05)
-                can.move(ball, -10, 0)
-                can.update()
-            flag = 0
+    while "True":
+        can.move(ball, x, y)
+        time.sleep(0.001)
+        can.update()
+        if can.coords(ball)[0] <= 50 or can.coords(ball)[2] >= 1030:
+            x = x*-1
+        elif can.coords(ball)[1] <= 50 or can.coords(ball)[3] >= 350:
+            y = y*-1
+
 
 
 # -------------------------------------------------------------------------------------------------------------------------
