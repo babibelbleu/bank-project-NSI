@@ -114,7 +114,7 @@ def get_user_connexion(idCompte):
         return user_connexion
 
 
-def insert_user_data(nom, prenom, sexe, naiss, identifiant, mdp, solde=0):
+def insert_user_data(nom, prenom, sexe, naiss, mdp, solde=0):
     """
     Crée un compte utilisateur en l'insérant dans la base de données
 
@@ -124,7 +124,6 @@ def insert_user_data(nom, prenom, sexe, naiss, identifiant, mdp, solde=0):
     prenom      : str   --> Prénom du nouvel utilisateur
     sexe        : str   --> Sexe du nouvel utilisateur. Ne peut prendre que "F"(féminin) ou "M"(masculin) en valeur
     naiss       : str   --> Date de naissance du nouvel utilisateur. Ne peut prendre que AAAA-MM-JJ en valeur
-    identifiant : str   --> identifiant de connexion du nouvel utilisateur
     mdp         : str   --> mot de passe de connexion du nouvel utilisateur
     solde       : int   --> Solde du nouvel utilisateur. 0 est la valeur par défaut
 
@@ -140,7 +139,7 @@ def insert_user_data(nom, prenom, sexe, naiss, identifiant, mdp, solde=0):
         data_to_insert = (idCompte, nom, prenom, solde, sexe, naiss)
 
         req3 = "INSERT INTO connexion VALUES(?,?,?)"
-        data_to_insert2 = (idCompte, identifiant, mdp)
+        data_to_insert2 = (idCompte, nom, mdp)
 
         cursor.execute(req2, data_to_insert)
         cursor.execute(req3, data_to_insert2)
@@ -150,6 +149,57 @@ def insert_user_data(nom, prenom, sexe, naiss, identifiant, mdp, solde=0):
     except Exception as e:
 
         print("Une erreur est survenue :", e)
+        
 
-insert_user_data("bodin", "bastien", "M","2004-11-10", "babibou", "babou")
-print(requete_perso("SELECT nom,prenom FROM compte ORDER BY idCompte DESC"))
+def is_user_exist(identifiant, mdp):
+    """
+    Fonction qui vérifie si un utilisateur est dans la base de données ou non.
+    
+    Parameters
+    ----------
+    identifiant : str   --> l'identifiant entré par l'utilisateur
+    mdp         : str   --> le mot de passe entré par l'utilisateur
+    
+    Returns
+    -------
+    idCompte : int       --> L'idCompte de l'utilisateur dans la bdd
+    False    : Boolean   --> Si le compte n'existe pas dans la bdd
+    
+    """
+    try :
+        req = "SELECT * FROM connexion"
+        res = requete_perso(req)
+        
+        # res est une liste de tuples comportant l'identifiant et le mdp
+        for elem in res:
+            if elem[1] == identifiant and elem[2] == mdp:
+                return elem[0]
+            
+        return False
+    except Exception as e:
+        return "Une erreur est survenue :", e
+    
+
+def virement(donne,recoit,montant):
+    """
+    Foncction qui effetue un virement d'un compte à l'autre.
+    
+    Parameters
+    ----------
+    donne   : int   --> L'idCompte de la personne qui donne l'argent
+    recoit  : int   --> L'idCompte de la personne qui reçoit l'argent
+    montant : int   --> Le montant du virement
+    
+    Returns
+    -------
+    True : boolean   --> Si la transaction a bien été effetuée
+    (False, error) : tuple   --> Si la transaction n'a pas pu être effetuée
+                                --> Renvoie False
+                                --> Renvoie l'erreur
+    
+    """
+    
+
+
+print(is_user_exist("testaccount","testaccount"))
+
