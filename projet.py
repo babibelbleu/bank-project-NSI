@@ -4,6 +4,7 @@
 from tkinter import *
 from tkinter import ttk, Menu
 from tkinter import Entry, Frame
+from tkinter import messagebox
 import time
 import dblink
 
@@ -12,6 +13,69 @@ import dblink
 def effacer():
     for widget in frame.winfo_children():
         widget.destroy()
+
+
+def effacer_crea():
+    if var_mot_de_passe2 is None or var_prenom is None or var_nom is None or date is None or sexe is None:
+        messagebox.showerror("Erreur", "Vous n'avez pas remplie tout les critére")
+    else:
+        for widget in frame.winfo_children():
+            widget.destroy()
+    dblink.insert_user_data(str(var_nom), str(var_prenom), str(sexe), date, str(var_mot_de_passe2))
+
+
+def connecte_crea():
+    global mon_menu
+    mon_menu = Menu(windows)
+    windows.config(menu=mon_menu, bg='#41B77F')
+    file_menu = Menu(mon_menu)
+    mon_menu.add_cascade(label="Information personnelle", menu=file_menu)
+    file_menu.add_command(label="Information personnelle", command=lambda: [effacer(), info()])
+
+    menu_depense = Menu(mon_menu)
+    mon_menu.add_cascade(label="Compte", menu=menu_depense)
+    menu_depense.add_command(label="Compte", command=lambda: [effacer(), compte()])
+    menu_depense.add_command(label="Dépense", command=lambda: [effacer(), depense()])
+
+    menu_deco = Menu(mon_menu)
+    mon_menu.add_cascade(label="Paramêtre", menu=menu_deco)
+    menu_deco.add_command(label="Paramêtre", command=lambda: [effacer(), parametre()])
+    menu_deco.add_command(label="Déconnexion", command=lambda: [effacer(), delete(), page_compte()])
+
+    label_slogan1 = Label(frame, text="La banque de tous les lycéens sauf les Littéraires",
+                          font=("Damion", 20), bg='#41B77F')
+    label_slogan1.pack()
+
+    width3 = 100
+    height3 = 100
+    image3 = PhotoImage(file='data-science.png').zoom(5).subsample(32)
+    canvas3 = Canvas(frame, width=width3, height=height3, bg='#41B77F', bd=0, highlightthickness=0)
+    canvas3.create_image(width / 2, height / 2, image=image3)
+    canvas3.pack()
+
+    label = Label(frame, text=("Bienvenue Monsieur", str(var_prenom), "."),
+                  font=("Damion", 35), bg='#41B77F')
+    label.pack()
+
+    # création d'une animation
+    can = Canvas(frame, height=400, width=1080, bg='#007FFF', bd=1)
+    can.pack(pady=50)
+    can.create_rectangle(50, 50, 1030, 350, fill='black')
+    ball = can.create_oval(100, 100, 150, 150, fill='yellow')
+    x = 1
+    y = 2
+
+    while True:
+        try:
+            can.move(ball, x, y)
+            time.sleep(0.001)
+            can.update()
+            if can.coords(ball)[0] <= 50 or can.coords(ball)[2] >= 1030:
+                x = x * -1
+            elif can.coords(ball)[1] <= 50 or can.coords(ball)[3] >= 350:
+                y = y * -1
+        except:
+            break
 
 
 # -------------------------------------------------------------------------------------------------------------------------
@@ -76,9 +140,12 @@ def page_compte():
 
 # fonction pour créer la page ou l'on peut créer son compte
 def creation_compte():
-    global combobox_annee
-    global combobox_mois
-    global combobox_jour
+    global var_mot_de_passe2
+    global date
+    global var_nom
+    global var_prenom
+    global sexe
+
     # création de la frame principale
     frame_crea = Frame(frame, bg='#41B77F')
     frame_crea2 = Frame(frame, bg='#41B77F')
@@ -173,7 +240,7 @@ def creation_compte():
     clicked_annee = StringVar()
     clicked_annee.set(annee_valeur[0])
 
-    annee = OptionMenu(frame_crea2,clicked_annee,*annee_valeur)
+    annee = OptionMenu(frame_crea2, clicked_annee, *annee_valeur)
     annee.grid(row=1, column=0)
 
     mois_valeur = ["01", "02", "03", "04", "05", "06", "07",
@@ -195,13 +262,12 @@ def creation_compte():
     jour = OptionMenu(frame_crea2, clicked_jour, *jour_valeur)
     jour.grid(row=1, column=2)
 
-
     # mise en place des variable pour créer le compte
 
     L = []
-    L.append(clicked_annee)
-    L.append(clicked_mois)
-    L.append(clicked_jour)
+    L.append(str(clicked_annee))
+    L.append(str(clicked_mois))
+    L.append(str(clicked_jour))
 
     date = "-".join(L)
 
@@ -217,8 +283,7 @@ def creation_compte():
                           font=("Comic sans MS", 15),
                           bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0',
                           activebackground='#007FFF', bd='1',
-                          command=lambda: [dblink.insert_user_data(var_nom, var_prenom, sexe, date, var_mot_de_passe2),
-                                           effacer(), connecte()])
+                          command=lambda: [effacer_crea(), connecte_crea()])
     button_suite.pack(side=LEFT)
 
     frame_crea.pack(expand=YES)
