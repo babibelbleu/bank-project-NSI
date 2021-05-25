@@ -4,6 +4,7 @@
 ########################
 
 import sqlite3 as sq3
+import datetime
 
 # Connexion à la bdd
 connexion = sq3.connect("banque.db")
@@ -198,8 +199,37 @@ def virement(donne,recoit,montant):
                                 --> Renvoie l'erreur
     
     """
+    try:
+        req_solde_compte1 = f"SELECT solde FROM compte WHERE idCompte={donne}"
+        req_solde_compte2 = f"SELECT solde FROM compte WHERE idCompte={recoit}"
+
+        rep_req1 = requete_perso(req_solde_compte1)
+        rep_req2 = requete_perso(req_solde_compte2)
+
+        nouveau_solde1 = rep_req1[0][0]-montant
+        nouveau_solde2 = rep_req2[0][0]+montant
+
+        req_update_compte1 = f"UPDATE compte SET solde={nouveau_solde1} WHERE idCompte={donne}"
+        req_update_compte2 = f"UPDATE compte SET solde={nouveau_solde2} WHERE idCompte={recoit}"
+
+        rep_update1 = requete_perso(req_update_compte1)
+        rep_update2 = requete_perso(req_update_compte2)
+
+        maintenant = datetime.datetime.now().strftime("%Y-%m-%d")
+        print(type(maintenant))
+
+        print(maintenant)
+
+        req_virement = f"INSERT INTO virements VALUES({donne},{recoit},{montant},{maintenant})"
+        execute = requete_perso(req_virement)
+
+        connexion.commit()
+
+        return True
+    except Exception as e:
+        return False, e
     
 
-
+# Commandes de test
+print(virement(100002, 100001, 1))
 print(is_user_exist("testaccount","testaccount"))
-
