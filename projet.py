@@ -15,67 +15,80 @@ def effacer():
         widget.destroy()
 
 
-def effacer_crea():
-    if var_mot_de_passe2 is None or var_prenom is None or var_nom is None or date is None or sexe is None:
-        messagebox.showerror("Erreur", "Vous n'avez pas remplie tout les critére")
-    else:
-        for widget in frame.winfo_children():
-            widget.destroy()
-    dblink.insert_user_data(str(var_nom), str(var_prenom), str(sexe), date, str(var_mot_de_passe2))
+def selected_annee(event):
+    global L
+    L.insert(0,str(clicked_annee.get()))
+
+
+def selected_mois(event):
+    global L
+    L.insert(1,str(clicked_mois.get()))
+
+
+def selected_jour(event):
+    global L
+    L.insert(2,str(clicked_jour.get()))
 
 
 def connecte_crea():
     global mon_menu
-    mon_menu = Menu(windows)
-    windows.config(menu=mon_menu, bg='#41B77F')
-    file_menu = Menu(mon_menu)
-    mon_menu.add_cascade(label="Information personnelle", menu=file_menu)
-    file_menu.add_command(label="Information personnelle", command=lambda: [effacer(), info()])
+    if var_mot_de_passe2.get() is None or var_prenom.get() is None or var_nom.get() is None or "-".join(L) is None or sexe is None:
+        messagebox.showerror("Erreur", "Vous n'avez pas remplie tout les critére")
+    else:
+        for widget in frame.winfo_children():
+            widget.destroy()
+        dblink.insert_user_data(str(var_nom.get()), str(var_prenom.get()), sexe, "-".join(L),
+                                str(var_mot_de_passe2.get()))
+        mon_menu = Menu(windows)
+        windows.config(menu=mon_menu, bg='#41B77F')
+        file_menu = Menu(mon_menu)
+        mon_menu.add_cascade(label="Information personnelle", menu=file_menu)
+        file_menu.add_command(label="Information personnelle", command=lambda: [effacer(), info()])
 
-    menu_depense = Menu(mon_menu)
-    mon_menu.add_cascade(label="Compte", menu=menu_depense)
-    menu_depense.add_command(label="Compte", command=lambda: [effacer(), compte()])
-    menu_depense.add_command(label="Dépense", command=lambda: [effacer(), depense()])
+        menu_depense = Menu(mon_menu)
+        mon_menu.add_cascade(label="Compte", menu=menu_depense)
+        menu_depense.add_command(label="Compte", command=lambda: [effacer(), compte()])
+        menu_depense.add_command(label="Dépense", command=lambda: [effacer(), depense()])
 
-    menu_deco = Menu(mon_menu)
-    mon_menu.add_cascade(label="Paramêtre", menu=menu_deco)
-    menu_deco.add_command(label="Paramêtre", command=lambda: [effacer(), parametre()])
-    menu_deco.add_command(label="Déconnexion", command=lambda: [effacer(), delete(), page_compte()])
+        menu_deco = Menu(mon_menu)
+        mon_menu.add_cascade(label="Paramêtre", menu=menu_deco)
+        menu_deco.add_command(label="Paramêtre", command=lambda: [effacer(), parametre()])
+        menu_deco.add_command(label="Déconnexion", command=lambda: [effacer(), delete(), page_compte()])
 
-    label_slogan1 = Label(frame, text="La banque de tous les lycéens sauf les Littéraires",
-                          font=("Damion", 20), bg='#41B77F')
-    label_slogan1.pack()
+        label_slogan1 = Label(frame, text="La banque de tous les lycéens sauf les Littéraires",
+                              font=("Damion", 20), bg='#41B77F')
+        label_slogan1.pack()
 
-    width3 = 100
-    height3 = 100
-    image3 = PhotoImage(file='data-science.png').zoom(5).subsample(32)
-    canvas3 = Canvas(frame, width=width3, height=height3, bg='#41B77F', bd=0, highlightthickness=0)
-    canvas3.create_image(width / 2, height / 2, image=image3)
-    canvas3.pack()
+        width3 = 100
+        height3 = 100
+        image3 = PhotoImage(file='data-science.png').zoom(5).subsample(32)
+        canvas3 = Canvas(frame, width=width3, height=height3, bg='#41B77F', bd=0, highlightthickness=0)
+        canvas3.create_image(width / 2, height / 2, image=image3)
+        canvas3.pack()
 
-    label = Label(frame, text=("Bienvenue Monsieur", str(var_prenom), "."),
-                  font=("Damion", 35), bg='#41B77F')
-    label.pack()
+        label = Label(frame, text=("Bienvenue Monsieur", var_prenom.get(), "."),
+                      font=("Damion", 35), bg='#41B77F')
+        label.pack()
 
-    # création d'une animation
-    can = Canvas(frame, height=400, width=1080, bg='#007FFF', bd=1)
-    can.pack(pady=50)
-    can.create_rectangle(50, 50, 1030, 350, fill='black')
-    ball = can.create_oval(100, 100, 150, 150, fill='yellow')
-    x = 1
-    y = 2
+        # création d'une animation
+        can = Canvas(frame, height=400, width=1080, bg='#007FFF', bd=1)
+        can.pack(pady=50)
+        can.create_rectangle(50, 50, 1030, 350, fill='black')
+        ball = can.create_oval(100, 100, 150, 150, fill='yellow')
+        x = 1
+        y = 2
 
-    while True:
-        try:
-            can.move(ball, x, y)
-            time.sleep(0.001)
-            can.update()
-            if can.coords(ball)[0] <= 50 or can.coords(ball)[2] >= 1030:
-                x = x * -1
-            elif can.coords(ball)[1] <= 50 or can.coords(ball)[3] >= 350:
-                y = y * -1
-        except:
-            break
+        while True:
+            try:
+                can.move(ball, x, y)
+                time.sleep(0.001)
+                can.update()
+                if can.coords(ball)[0] <= 50 or can.coords(ball)[2] >= 1030:
+                    x = x * -1
+                elif can.coords(ball)[1] <= 50 or can.coords(ball)[3] >= 350:
+                    y = y * -1
+            except:
+                break
 
 
 # -------------------------------------------------------------------------------------------------------------------------
@@ -88,6 +101,8 @@ def delete():
 
 # fonction pour créer page principales
 def page_compte():
+    global variable_mot_de_passe
+    global variable_nom
     # ajout slogan prémiére page
     label_slogancompte = Label(frame, text="La banque de tous les lycéens sauf les Littéraires",
                                font=("Damion", 20), bg='#41B77F')
@@ -107,7 +122,9 @@ def page_compte():
     label_titlecompte.pack()
 
     # creation de la zone de texte pour le nom
-    nom_entrycompte = Entry(frame, font=("Comic sans MS", 20), bg='#41B77F', fg='black')
+    variable_nom = StringVar()
+    nom_entrycompte = Entry(frame, font=("Comic sans MS", 20), bg='#41B77F', fg='black',
+                            textvariable = variable_nom)
     nom_entrycompte.pack()
 
     # creation de la zone de texte pour le nom
@@ -116,13 +133,15 @@ def page_compte():
     label_titlecompte.pack()
 
     # creation de la zone de texte pour le mot de passe
-    nom_entrycompte2 = Entry(frame, font=("Comic sans MS", 20), show='*', bg='#41B77F', fg='black')
+    variable_mot_de_passe = StringVar()
+    nom_entrycompte2 = Entry(frame, font=("Comic sans MS", 20), show='*', bg='#41B77F', fg='black',
+                             textvariable = variable_mot_de_passe)
     nom_entrycompte2.pack()
 
     # création bouton connexion
     button_co = Button(frame, text="connexion", font=("Comic sans MS", 20), bg='#007FFF',
                        fg='#40E0D0', activeforeground='#40E0D0', activebackground='#007FFF', bd='1',
-                       command=lambda: [effacer(), page_connecte(), connecte()])
+                       command= page_connecte)
     button_co.pack(pady=5)
 
     # création bouton création compte
@@ -145,6 +164,12 @@ def creation_compte():
     global var_nom
     global var_prenom
     global sexe
+    global clicked_annee
+    global clicked_mois
+    global clicked_jour
+    global L
+    #Liste contenant la date
+    L = []
 
     # création de la frame principale
     frame_crea = Frame(frame, bg='#41B77F')
@@ -238,18 +263,16 @@ def creation_compte():
                     "2015", "2016", "2017", "2018", "2019", "2020", "2021"]
 
     clicked_annee = StringVar()
-    clicked_annee.set(annee_valeur[0])
 
-    annee = OptionMenu(frame_crea2, clicked_annee, *annee_valeur)
+    annee = OptionMenu(frame_crea2, clicked_annee, *annee_valeur, command=selected_annee)
     annee.grid(row=1, column=0)
 
     mois_valeur = ["01", "02", "03", "04", "05", "06", "07",
                    "08", "09", "10", "11", "12"]
 
     clicked_mois = StringVar()
-    clicked_mois.set(mois_valeur[0])
 
-    mois = OptionMenu(frame_crea2, clicked_mois, *mois_valeur)
+    mois = OptionMenu(frame_crea2, clicked_mois, *mois_valeur, command= selected_mois)
     mois.grid(row=1, column=1)
 
     jour_valeur = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13",
@@ -257,19 +280,9 @@ def creation_compte():
                    "26", "27", "28", "29", "30", "31"]
 
     clicked_jour = StringVar()
-    clicked_jour.set(jour_valeur[0])
 
-    jour = OptionMenu(frame_crea2, clicked_jour, *jour_valeur)
+    jour = OptionMenu(frame_crea2, clicked_jour, *jour_valeur, command=selected_jour)
     jour.grid(row=1, column=2)
-
-    # mise en place des variable pour créer le compte
-
-    L = []
-    L.append(str(clicked_annee))
-    L.append(str(clicked_mois))
-    L.append(str(clicked_jour))
-
-    date = "-".join(L)
 
     # création du bouton de retour en arriéres
     button_retour = Button(bottomframe, text="retour",
@@ -283,7 +296,7 @@ def creation_compte():
                           font=("Comic sans MS", 15),
                           bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0',
                           activebackground='#007FFF', bd='1',
-                          command=lambda: [effacer_crea(), connecte_crea()])
+                          command=connecte_crea)
     button_suite.pack(side=LEFT)
 
     frame_crea.pack(expand=YES)
@@ -293,16 +306,12 @@ def creation_compte():
 
 # fonction pour créer la pag du compte sur laquelle se trouve les info perso
 def info():
-    label_nom = Label(frame, text="Information a rajouter plus tard",
-                      font=("Damion", 20), bg='#41B77F')
-    label_nom.pack()
+    pass
 
 
 # fonction pour créer la page conenat les information sur le montant du compte
 def compte():
-    label_compte = Label(frame, text="Montant du compte a rajouter",
-                         font=("Damion", 20), bg='#41B77F')
-    label_compte.pack()
+    pass
 
 
 # fonction pour créer oa page pour envoyer de l'argent
@@ -352,58 +361,66 @@ def parametre():
 
 
 # fontion qui crée la frame de la premiere page du compte lors de la connexion
-def connecte():
+def page_connecte():
     global mon_menu
-    mon_menu = Menu(windows)
-    windows.config(menu=mon_menu, bg='#41B77F')
-    file_menu = Menu(mon_menu)
-    mon_menu.add_cascade(label="Information personnelle", menu=file_menu)
-    file_menu.add_command(label="Information personnelle", command=lambda: [effacer(), info()])
+    if str(var_mot_de_passe.get()) is None or str(var_utilisateur.get()) is None:
+        messagebox.showerror("Erreur","Le mot de passe ou le nom est ou sont incorrect")
+    else:
+        if dblink.is_user_exist(str(var_mot_de_passe.get()),(str(var_utilisateur.get()))) is False:
+            messagebox.showerror("Erreur", "Le mot de passe ou le nom est ou sont incorrecte")
+        else:
+            for widget in frame.winfo_children():
+                widget.destroy()
+            mon_menu = Menu(windows)
+            windows.config(menu=mon_menu, bg='#41B77F')
+            file_menu = Menu(mon_menu)
+            mon_menu.add_cascade(label="Information personnelle", menu=file_menu)
+            file_menu.add_command(label="Information personnelle", command=lambda: [effacer(), info()])
 
-    menu_depense = Menu(mon_menu)
-    mon_menu.add_cascade(label="Compte", menu=menu_depense)
-    menu_depense.add_command(label="Compte", command=lambda: [effacer(), compte()])
-    menu_depense.add_command(label="Dépense", command=lambda: [effacer(), depense()])
+            menu_depense = Menu(mon_menu)
+            mon_menu.add_cascade(label="Compte", menu=menu_depense)
+            menu_depense.add_command(label="Compte", command=lambda: [effacer(), compte()])
+            menu_depense.add_command(label="Dépense", command=lambda: [effacer(), depense()])
 
-    menu_deco = Menu(mon_menu)
-    mon_menu.add_cascade(label="Paramêtre", menu=menu_deco)
-    menu_deco.add_command(label="Paramêtre", command=lambda: [effacer(), parametre()])
-    menu_deco.add_command(label="Déconnexion", command=lambda: [effacer(), delete(), page_compte()])
+            menu_deco = Menu(mon_menu)
+            mon_menu.add_cascade(label="Paramêtre", menu=menu_deco)
+            menu_deco.add_command(label="Paramêtre", command=lambda: [effacer(), parametre()])
+            menu_deco.add_command(label="Déconnexion", command=lambda: [effacer(), delete(), page_compte()])
 
-    label_slogan1 = Label(frame, text="La banque de tous les lycéens sauf les Littéraires",
+            label_slogan1 = Label(frame, text="La banque de tous les lycéens sauf les Littéraires",
                           font=("Damion", 20), bg='#41B77F')
-    label_slogan1.pack()
+            label_slogan1.pack()
 
-    width3 = 100
-    height3 = 100
-    image3 = PhotoImage(file='data-science.png').zoom(5).subsample(32)
-    canvas3 = Canvas(frame, width=width3, height=height3, bg='#41B77F', bd=0, highlightthickness=0)
-    canvas3.create_image(width / 2, height / 2, image=image3)
-    canvas3.pack()
+            width3 = 100
+            height3 = 100
+            image3 = PhotoImage(file='data-science.png').zoom(5).subsample(32)
+            canvas3 = Canvas(frame, width=width3, height=height3, bg='#41B77F', bd=0, highlightthickness=0)
+            canvas3.create_image(width / 2, height / 2, image=image3)
+            canvas3.pack()
 
-    label = Label(frame, text="Bienvenue Monsieur ...",
+            label = Label(frame, text=("Bienvenue Monsieur",var_utilisateur.get(),"."),
                   font=("Damion", 35), bg='#41B77F')
-    label.pack()
+            label.pack()
 
-    # création d'une animation
-    can = Canvas(frame, height=400, width=1080, bg='#007FFF', bd=1)
-    can.pack(pady=50)
-    can.create_rectangle(50, 50, 1030, 350, fill='black')
-    ball = can.create_oval(100, 100, 150, 150, fill='yellow')
-    x = 1
-    y = 2
+            # création d'une animation
+            can = Canvas(frame, height=400, width=1080, bg='#007FFF', bd=1)
+            can.pack(pady=50)
+            can.create_rectangle(50, 50, 1030, 350, fill='black')
+            ball = can.create_oval(100, 100, 150, 150, fill='yellow')
+            x = 1
+            y = 2
 
-    while True:
-        try:
-            can.move(ball, x, y)
-            time.sleep(0.001)
-            can.update()
-            if can.coords(ball)[0] <= 50 or can.coords(ball)[2] >= 1030:
-                x = x * -1
-            elif can.coords(ball)[1] <= 50 or can.coords(ball)[3] >= 350:
-                y = y * -1
-        except:
-            break
+            while True:
+                try:
+                    can.move(ball, x, y)
+                    time.sleep(0.001)
+                    can.update()
+                    if can.coords(ball)[0] <= 50 or can.coords(ball)[2] >= 1030:
+                        x = x * -1
+                    elif can.coords(ball)[1] <= 50 or can.coords(ball)[3] >= 350:
+                        y = y * -1
+                except:
+                    break
 
 
 # -------------------------------------------------------------------------------------------------------------------------
@@ -521,6 +538,8 @@ def menu_espagnol():
 # ------------------------------------------------------------------------------------------------------------------------
 # page principalee
 global windows
+global var_mot_de_passe
+global var_utilsateur
 windows = Tk()
 # personnalier la fenêtre
 windows.title("Bank Terminale scientifique")
@@ -558,19 +577,20 @@ nom_entry1 = Entry(frame, font=("Comic sans MS", 20), textvariable=var_utilisate
 nom_entry1.pack()
 
 # creation de la zone de texte pour le nom
-var_mot_de_passe = StringVar()
 label_title4 = Label(frame, text="mot de passe", font=("Comic sans MS", 20), bg='#41B77F',
-                     bd=0, highlightthickness=0, textvariable=var_mot_de_passe)
+                     bd=0, highlightthickness=0)
 label_title4.pack()
 
 # creation de la zone de texte pour le mot de passe
-nom_entry2 = Entry(frame, font=("Comic sans MS", 20), show='*', bg='#41B77F', fg='black')
+var_mot_de_passe = StringVar()
+nom_entry2 = Entry(frame, font=("Comic sans MS", 20), show='*', bg='#41B77F', fg='black',
+                   textvariable=var_mot_de_passe)
 nom_entry2.pack()
 
 # création bouton connexion
 button = Button(frame, text="connexion", font=("Comic sans MS", 20), bg='#007FFF',
                 fg='#40E0D0', activeforeground='#40E0D0', activebackground='#007FFF', bd='1',
-                command=lambda: [effacer(), connecte()])
+                command=page_connecte)
 button.pack(pady=5)
 
 # création bouton création compte
