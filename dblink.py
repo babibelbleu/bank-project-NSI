@@ -3,6 +3,12 @@
 #   pour gérer la bdd
 ########################
 
+"""
+Fait de A à Z par Bastien
+Voir issues sur github pour la liste des bugs du projet.
+"""
+
+# Importation des bibliothèques
 import sqlite3 as sq3
 import datetime
 
@@ -197,6 +203,12 @@ def virement(donne,recoit,montant):
     (False, error) : tuple   --> Si la transaction n'a pas pu être effetuée
                                 --> Renvoie False
                                 --> Renvoie l'erreur
+
+    Bugs
+    ----
+    Problème de date : elle affiche la bonne date du virement sous le format demandé,
+    mais dans la base de données n'indique que "1991". La seule supposition possible peut être due
+    au fait de l'encodage du sgbd en 32 bits qui créerait un problème lors de l'insertion
     
     """
     try:
@@ -212,8 +224,8 @@ def virement(donne,recoit,montant):
         req_update_compte1 = f"UPDATE compte SET solde={nouveau_solde1} WHERE idCompte={donne}"
         req_update_compte2 = f"UPDATE compte SET solde={nouveau_solde2} WHERE idCompte={recoit}"
 
-        rep_update1 = requete_perso(req_update_compte1)
-        rep_update2 = requete_perso(req_update_compte2)
+        requete_perso(req_update_compte1)
+        requete_perso(req_update_compte2)
 
         maintenant = datetime.datetime.now().strftime("%Y-%m-%d")
         print(type(maintenant))
@@ -221,15 +233,10 @@ def virement(donne,recoit,montant):
         print(maintenant)
 
         req_virement = f"INSERT INTO virements VALUES({donne},{recoit},{montant},{maintenant})"
-        execute = requete_perso(req_virement)
+        requete_perso(req_virement)
 
         connexion.commit()
 
         return True
     except Exception as e:
         return False, e
-    
-
-# Commandes de test
-print(virement(100002, 100001, 1))
-print(is_user_exist("testaccount","testaccount"))
