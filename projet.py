@@ -18,7 +18,11 @@ from tkinter import ttk, Menu
 from tkinter import Entry, Frame
 from tkinter import messagebox
 import time
+<<<<<<< HEAD
 import dblink  # Bibliothèque crée pour gérer la base de données crée
+=======
+import dblink# Bibliothèque crée pour gérer la base de données crée
+>>>>>>> b84c51fbb23b0ec709372a7960e503772dd60d38
 
 
 def effacer():
@@ -28,14 +32,21 @@ def effacer():
     for widget in frame.winfo_children():
         widget.destroy()
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> b84c51fbb23b0ec709372a7960e503772dd60d38
 """
 Les 3 prochaines fonctions servent à enregistrer les informations de la date de naissance de l'utilisateur
 lors de la création de son compte (voir dblink.py pour comprendre le format de la date)
 """
+<<<<<<< HEAD
 
 
 def selected_annee():
+=======
+def selected_annee(event):
+>>>>>>> b84c51fbb23b0ec709372a7960e503772dd60d38
     global L
     L.insert(0, str(clicked_annee.get()))
 
@@ -385,8 +396,19 @@ def depense():
     """
     Page crée quand on veut faire un virement à une personne
     """
+<<<<<<< HEAD
     global var_montant
     global var_ID
+=======
+
+    label_receveur = Label(frame, text="Nom de la personne a qui envoyer de l'argent",
+                           font=("Damion", 20), bg='#41B77F')
+    label_receveur.pack()
+
+    nom_entry_receveur = Entry(frame, font=("Comic sans MS", 20), bg='#41B77F', fg='black')
+    nom_entry_receveur.pack()
+
+>>>>>>> b84c51fbb23b0ec709372a7960e503772dd60d38
     label_code = Label(frame, text="Identifiant du compte",
                        font=("Damion", 20), bg='#41B77F')
     label_code.pack()
@@ -450,6 +472,7 @@ def page_connecte():
     Page affichée quand on est connecté
     """
 
+<<<<<<< HEAD
     global ID
     global mon_menu
 
@@ -459,6 +482,15 @@ def page_connecte():
     else:
         ID = dblink.is_user_exist(str(var_utilisateur.get()), (str(var_mot_de_passe.get())))
         if not ID:
+=======
+    global mon_menu
+
+    # On vérifie si l'utilisateur a les bons identifiants et si il les a bien rentrés dans les cases
+    if str(var_mot_de_passe.get()) is None or str(var_utilisateur.get()) is None:
+        messagebox.showerror("Erreur","Le mot de passe ou le nom sont incorrects")
+    else:
+        if not dblink.is_user_exist(str(var_utilisateur.get()),(str(var_mot_de_passe.get()))):
+>>>>>>> b84c51fbb23b0ec709372a7960e503772dd60d38
             messagebox.showerror("Erreur", "Le mot de passe ou le nom sont incorrects")
         else:
             effacer()
