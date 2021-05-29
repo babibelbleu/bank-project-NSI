@@ -226,13 +226,6 @@ def virement(donne,recoit,montant):
     (False, error) : tuple   --> Si la transaction n'a pas pu être effetuée
                                 --> Renvoie False
                                 --> Renvoie l'erreur
-
-    Bugs
-    ----
-    Problème de date : elle affiche la bonne date du virement sous le format demandé,
-    mais dans la base de données n'indique que "1991". La seule supposition possible peut être due
-    au fait de l'encodage du sgbd en 32 bits qui créerait un problème lors de l'insertion
-    
     """
     try:
         req_solde_compte1 = f"SELECT solde FROM compte WHERE idCompte={donne}"
@@ -250,13 +243,14 @@ def virement(donne,recoit,montant):
         requete_perso(req_update_compte1)
         requete_perso(req_update_compte2)
 
-        maintenant = datetime.datetime.now().strftime("%Y--%m--%d")
+        maintenant = datetime.datetime.now().strftime("%Y-%m-%d")
         print(type(maintenant))
         
         print(maintenant)
 
-        req_virement = f"INSERT INTO virements VALUES({donne},{recoit},{montant},{maintenant})"
-        requete_perso(req_virement)
+        req_virement = f"INSERT INTO virements VALUES(?,?,?,?)"
+        data_to_insert = (donne,recoit,montant,maintenant)
+        cursor.execute(req_virement, data_to_insert)
 
         connexion.commit()
 
@@ -298,4 +292,4 @@ def get_user_virement(idCompte):
     return virements
     
 
-print(get_compte(100002).prenom)
+print(virement(100000, 100001, 30))
