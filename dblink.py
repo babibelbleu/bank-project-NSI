@@ -87,7 +87,9 @@ def get_compte(idCompte):
         compte = Compte(rep[0][0],
                         rep[0][1],
                         rep[0][2],
-                        rep[0][3])
+                        rep[0][3],
+                        rep[0][4],
+                        rep[0][5])
         return compte
 
 
@@ -187,6 +189,27 @@ def is_user_exist(identifiant, mdp):
         return "Une erreur est survenue :", e
     
 
+def is_id_exist(idCompte):
+    """
+    Vérifie si l'idCompte est bien inscrit dans la base de données
+    
+    Parameters
+    ----------
+    idCompte : int   --> l'idCompte de la personne que l'on veut vérifier
+    
+    Return
+    ------
+    True  : boolean   --> Si l'utlisateur existe
+    False : boolean   --> Si l'utilisateur n'existe pas
+    
+    """
+    req = f"SELECT * FROM compte WHERE idCompte={idCompte}"
+    rep = requete_perso(req)
+    if rep==[]:
+        return False
+    return True
+    
+
 def virement(donne,recoit,montant):
     """
     Foncction qui effetue un virement d'un compte à l'autre.
@@ -227,9 +250,9 @@ def virement(donne,recoit,montant):
         requete_perso(req_update_compte1)
         requete_perso(req_update_compte2)
 
-        maintenant = datetime.datetime.now().strftime("%Y-%m-%d")
+        maintenant = datetime.datetime.now().strftime("%Y--%m--%d")
         print(type(maintenant))
-
+        
         print(maintenant)
 
         req_virement = f"INSERT INTO virements VALUES({donne},{recoit},{montant},{maintenant})"
@@ -240,3 +263,39 @@ def virement(donne,recoit,montant):
         return True
     except Exception as e:
         return False, e
+    
+def get_user_virement(idCompte):
+    """
+    Renvoie tous les virements effectués par l'utilisateur
+    
+    Parameters
+    ----------
+    idCompte : int   --> L'idCompte de l'utilisateur à 6 chiffres
+    
+    Return
+    ------
+    virements : dict   --> Dictionnaire de tous les viirements effectués.
+                        Prend pour clés "effectue" (virements effectués)
+                                        "recu"     (virements recus)
+                                        
+                        Et donne pour valeur une liste contenant
+                        tous les détails relatifs au virement, est de la forme
+                        (idComptedonne, idCompterecoit, montant, date)
+    
+    """
+    virements = {}
+    virements["effectue"] = []
+    virements["recu"] = []
+    
+    req1 = "SELECT * FROM virements"
+    rep = requete_perso(req1)
+    for virement in rep:
+        if virement[0] == idCompte:
+            virements["effectue"].append(virement)
+        if virement[1] == idCompte:
+            virements["recu"].append(virement)
+    
+    return virements
+    
+
+print(get_compte(100002).prenom)
