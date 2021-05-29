@@ -268,7 +268,7 @@ def get_user_virement(idCompte):
     
     Return
     ------
-    virements : dict   --> Dictionnaire de tous les viirements effectués.
+    virements : dict   --> Dictionnaire de tous les virements effectués.
                         Prend pour clés "effectue" (virements effectués)
                                         "recu"     (virements recus)
                                         
@@ -277,7 +277,7 @@ def get_user_virement(idCompte):
                         (idComptedonne, idCompterecoit, montant, date)
     
     """
-    virements = {}
+    virements = dict()
     virements["effectue"] = []
     virements["recu"] = []
     
@@ -290,6 +290,3 @@ def get_user_virement(idCompte):
             virements["recu"].append(virement)
     
     return virements
-    
-
-print(virement(100000, 100001, 30))
