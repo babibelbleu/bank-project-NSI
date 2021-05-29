@@ -28,23 +28,26 @@ def effacer():
     for widget in frame.winfo_children():
         widget.destroy()
 
+
 """
 Les 3 prochaines fonctions servent à enregistrer les informations de la date de naissance de l'utilisateur
 lors de la création de son compte (voir dblink.py pour comprendre le format de la date)
 """
-def selected_annee(event):
+
+
+def selected_annee():
     global L
-    L.insert(0,str(clicked_annee.get()))
+    L.insert(0, str(clicked_annee.get()))
 
 
-def selected_mois(event):
+def selected_mois():
     global L
-    L.insert(1,str(clicked_mois.get()))
+    L.insert(1, str(clicked_mois.get()))
 
 
-def selected_jour(event):
+def selected_jour():
     global L
-    L.insert(2,str(clicked_jour.get()))
+    L.insert(2, str(clicked_jour.get()))
 
 
 def connecte_crea():
@@ -54,7 +57,8 @@ def connecte_crea():
 
     # Création d'un menu déroulant
     global mon_menu
-    if var_mot_de_passe2.get() is None or var_prenom.get() is None or var_nom.get() is None or "-".join(L) is None or sexe is None:
+    if var_mot_de_passe2.get() == "" or var_prenom.get() == "" or var_nom.get() == "" or "-".join(
+            L) == "" or sexe == "":
         messagebox.showerror("Erreur", "Vous n'avez pas remplie tout les critére")
     else:
         for widget in frame.winfo_children():
@@ -70,7 +74,7 @@ def connecte_crea():
         menu_depense = Menu(mon_menu)
         mon_menu.add_cascade(label="Compte", menu=menu_depense)
         menu_depense.add_command(label="Compte", command=lambda: [effacer(), compte()])
-        menu_depense.add_command(label="Dépense", command=lambda: [effacer(), depense()])
+        menu_depense.add_command(label="Virement", command=lambda: [effacer(), depense()])
 
         menu_deco = Menu(mon_menu)
         mon_menu.add_cascade(label="Paramètres", menu=menu_deco)
@@ -158,7 +162,7 @@ def page_compte():
     # creation de la zone de texte pour le nom
     variable_nom = StringVar()
     nom_entrycompte = Entry(frame, font=("Comic sans MS", 20), bg='#41B77F', fg='black',
-                            textvariable = variable_nom)
+                            textvariable=variable_nom)
     nom_entrycompte.pack()
 
     # creation du texte indiquant "mot de passe"
@@ -169,13 +173,13 @@ def page_compte():
     # creation de la zone de texte pour le mot de passe
     variable_mot_de_passe = StringVar()
     nom_entrycompte2 = Entry(frame, font=("Comic sans MS", 20), show='*', bg='#41B77F', fg='black',
-                             textvariable = variable_mot_de_passe)
+                             textvariable=variable_mot_de_passe)
     nom_entrycompte2.pack()
 
     # création bouton "connexion"
     button_co = Button(frame, text="connexion", font=("Comic sans MS", 20), bg='#007FFF',
                        fg='#40E0D0', activeforeground='#40E0D0', activebackground='#007FFF', bd='1',
-                       command= page_connecte)
+                       command=page_connecte)
     button_co.pack(pady=5)
 
     # création bouton "création compte"
@@ -311,7 +315,7 @@ def creation_compte():
 
     clicked_mois = StringVar()
 
-    mois = OptionMenu(frame_crea2, clicked_mois, *mois_valeur, command= selected_mois)
+    mois = OptionMenu(frame_crea2, clicked_mois, *mois_valeur, command=selected_mois)
     mois.grid(row=1, column=1)
 
     jour_valeur = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13",
@@ -345,7 +349,31 @@ def creation_compte():
 
 # fonction pour créer la pag du compte sur laquelle se trouve les info perso
 def info():
-    pass
+     global compte
+     compte = dblink.get_compte(ID)
+     label_info_nom = Label(frame, text=("Nom:",compte.nom,"."),
+                           font=("Damion", 20), bg='#41B77F')
+     label_info_nom.pack()
+
+     label_info_prenom = Label(frame, text=("Prénom:",compte.prenom,"."),
+                            font=("Damion", 20), bg='#41B77F')
+     label_info_prenom.pack()
+
+     label_info_solde = Label(frame, text=("Solde:",compte.solde,"."),
+                            font=("Damion", 20), bg='#41B77F')
+     label_info_solde.pack()
+
+     label_info_sexe = Label(frame, text=("Sexe:",compte.sexe,"."),
+                            font=("Damion", 20), bg='#41B77F')
+     label_info_sexe.pack()
+
+     label_info_naissance = Label(frame, text=("Date de naissance:",compte.naiss,"."),
+                            font=("Damion", 20), bg='#41B77F')
+     label_info_naissance.pack()
+
+     label_info_ID = Label(frame, text=("Identifiant du compte:", compte.idCompte, "."),
+                                  font=("Damion", 20), bg='#41B77F')
+     label_info_ID.pack()
 
 
 # fonction pour créer la page conenat les information sur le montant du compte
@@ -357,6 +385,8 @@ def depense():
     """
     Page crée quand on veut faire un virement à une personne
     """
+    global var_montant
+    global var_ID
 
     label_receveur = Label(frame, text="Nom de la personne a qui envoyer de l'argent",
                            font=("Damion", 20), bg='#41B77F')
@@ -369,19 +399,37 @@ def depense():
                        font=("Damion", 20), bg='#41B77F')
     label_code.pack()
 
-    nom_entry_code = Entry(frame, font=("Comic sans MS", 20), bg='#41B77F', fg='black')
+    var_ID = StringVar()
+    nom_entry_code = Entry(frame, font=("Comic sans MS", 20), bg='#41B77F', fg='black',
+                           textvariable = var_ID)
     nom_entry_code.pack()
 
     label_montant = Label(frame, text="Montant",
                           font=("Damion", 20), bg='#41B77F')
     label_montant.pack()
 
-    nom_entry_montant = Entry(frame, font=("Comic sans MS", 20), bg='#41B77F', fg='black')
+    var_montant = StringVar()
+    nom_entry_montant = Entry(frame, font=("Comic sans MS", 20), bg='#41B77F', fg='black',
+                              textvariable = var_montant)
     nom_entry_montant.pack()
 
     button_envoie = Button(frame, text="Envoyer", font=("Comic sans MS", 20),
-                           bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0', activebackground='#007FFF')
+                           bg='#007FFF', fg='#40E0D0', activeforeground='#40E0D0', activebackground='#007FFF',
+                           command = verification)
     button_envoie.pack()
+
+def verification():
+    if var_ID.get() == "" or var_montant == "":
+        messagebox.showerror("Erreur","Vous n'avez pas remplie tout les case")
+    else:
+        if not dblink.is_id_exist(var_ID.get()):
+            messagebox.showerror("Erreur", "Le compte auquel vous voulez envoyé de l'argent n'existe pas")
+        else:
+            if var_montant.get() > compte.solde:
+                messagebox.showerror("Erreur","Vous ne possédez pas les fonds nécessaires")
+            else:
+                dblink.virement(compte.IdCompte,var_ID, var_montant.get())
+                messagebox.showinfo("Effectué","Le virement a bien été éffectué")
 
 
 def parametre():
@@ -409,7 +457,16 @@ def page_connecte():
     """
     Page affichée quand on est connecté
     """
+    global ID
+    global mon_menu
 
+    # On vérifie si l'utilisateur a les bons identifiants et si il les a bien rentrés dans les cases
+    if str(var_mot_de_passe.get()) == "" or str(var_utilisateur.get()) == "":
+        messagebox.showerror("Erreur", "Le mot de passe ou le nom sont incorrects")
+    else:
+        ID = dblink.is_user_exist(str(var_utilisateur.get()), (str(var_mot_de_passe.get())))
+        if not ID:
+            messagebox.showerror("Erreur", "Votre compte n'existe pas.")
     global mon_menu
 
     # On vérifie si l'utilisateur a les bons identifiants et si il les a bien rentrés dans les cases
@@ -429,7 +486,7 @@ def page_connecte():
             menu_depense = Menu(mon_menu)
             mon_menu.add_cascade(label="Compte", menu=menu_depense)
             menu_depense.add_command(label="Compte", command=lambda: [effacer(), compte()])
-            menu_depense.add_command(label="Dépense", command=lambda: [effacer(), depense()])
+            menu_depense.add_command(label="Virement", command=lambda: [effacer(), depense()])
 
             menu_deco = Menu(mon_menu)
             mon_menu.add_cascade(label="Paramètres", menu=menu_deco)
@@ -437,7 +494,7 @@ def page_connecte():
             menu_deco.add_command(label="Déconnexion", command=lambda: [effacer(), delete(), page_compte()])
 
             label_slogan1 = Label(frame, text="La banque de tous les lycéens sauf les Littéraires",
-                          font=("Damion", 20), bg='#41B77F')
+                                  font=("Damion", 20), bg='#41B77F')
             label_slogan1.pack()
 
             width3 = 100
@@ -447,8 +504,8 @@ def page_connecte():
             canvas3.create_image(width / 2, height / 2, image=image3)
             canvas3.pack()
 
-            label = Label(frame, text=("Bienvenue Monsieur",var_utilisateur.get(),"."),
-                  font=("Damion", 35), bg='#41B77F')
+            label = Label(frame, text=("Bienvenue Monsieur", var_utilisateur.get(), "."),
+                          font=("Damion", 35), bg='#41B77F')
             label.pack()
 
             # création d'une animation

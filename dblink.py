@@ -87,7 +87,9 @@ def get_compte(idCompte):
         compte = Compte(rep[0][0],
                         rep[0][1],
                         rep[0][2],
-                        rep[0][3])
+                        rep[0][3],
+                        rep[0][4],
+                        rep[0][5])
         return compte
 
 
@@ -187,6 +189,27 @@ def is_user_exist(identifiant, mdp):
         return "Une erreur est survenue :", e
     
 
+def is_id_exist(idCompte):
+    """
+    Vérifie si l'idCompte est bien inscrit dans la base de données
+    
+    Parameters
+    ----------
+    idCompte : int   --> l'idCompte de la personne que l'on veut vérifier
+    
+    Return
+    ------
+    True  : boolean   --> Si l'utlisateur existe
+    False : boolean   --> Si l'utilisateur n'existe pas
+    
+    """
+    req = f"SELECT * FROM compte WHERE idCompte={idCompte}"
+    rep = requete_perso(req)
+    if rep==[]:
+        return False
+    return True
+    
+
 def virement(donne,recoit,montant):
     """
     Foncction qui effetue un virement d'un compte à l'autre.
@@ -203,13 +226,6 @@ def virement(donne,recoit,montant):
     (False, error) : tuple   --> Si la transaction n'a pas pu être effetuée
                                 --> Renvoie False
                                 --> Renvoie l'erreur
-
-    Bugs
-    ----
-    Problème de date : elle affiche la bonne date du virement sous le format demandé,
-    mais dans la base de données n'indique que "1991". La seule supposition possible peut être due
-    au fait de l'encodage du sgbd en 32 bits qui créerait un problème lors de l'insertion
-    
     """
     try:
         req_solde_compte1 = f"SELECT solde FROM compte WHERE idCompte={donne}"
@@ -229,14 +245,48 @@ def virement(donne,recoit,montant):
 
         maintenant = datetime.datetime.now().strftime("%Y-%m-%d")
         print(type(maintenant))
-
+        
         print(maintenant)
 
-        req_virement = f"INSERT INTO virements VALUES({donne},{recoit},{montant},{maintenant})"
-        requete_perso(req_virement)
+        req_virement = f"INSERT INTO virements VALUES(?,?,?,?)"
+        data_to_insert = (donne,recoit,montant,maintenant)
+        cursor.execute(req_virement, data_to_insert)
 
         connexion.commit()
 
         return True
     except Exception as e:
         return False, e
+    
+def get_user_virement(idCompte):
+    """
+    Renvoie tous les virements effectués par l'utilisateur
+    
+    Parameters
+    ----------
+    idCompte : int   --> L'idCompte de l'utilisateur à 6 chiffres
+    
+    Return
+    ------
+    virements : dict   --> Dictionnaire de tous les virements effectués.
+                        Prend pour clés "effectue" (virements effectués)
+                                        "recu"     (virements recus)
+                                        
+                        Et donne pour valeur une liste contenant
+                        tous les détails relatifs au virement, est de la forme
+                        (idComptedonne, idCompterecoit, montant, date)
+    
+    """
+    virements = dict()
+    virements["effectue"] = []
+    virements["recu"] = []
+    
+    req1 = "SELECT * FROM virements"
+    rep = requete_perso(req1)
+    for virement in rep:
+        if virement[0] == idCompte:
+            virements["effectue"].append(virement)
+        if virement[1] == idCompte:
+            virements["recu"].append(virement)
+    
+    return virements
