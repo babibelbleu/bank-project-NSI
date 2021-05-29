@@ -349,35 +349,36 @@ def creation_compte():
 
 # fonction pour créer la pag du compte sur laquelle se trouve les info perso
 def info():
-     global compte
-     compte = dblink.get_compte(ID)
-     label_info_nom = Label(frame, text=("Nom:",compte.nom,"."),
-                           font=("Damion", 20), bg='#41B77F')
-     label_info_nom.pack()
-
-     label_info_prenom = Label(frame, text=("Prénom:",compte.prenom,"."),
+    global compte
+    compte = dblink.get_compte(ID)
+    print(compte.nom)
+    label_info_nom = Label(frame, text=("Nom:",compte.nom,"."),
                             font=("Damion", 20), bg='#41B77F')
-     label_info_prenom.pack()
+    label_info_nom.pack()
 
-     label_info_solde = Label(frame, text=("Solde:",compte.solde,"."),
+    label_info_prenom = Label(frame, text=("Prénom:",compte.prenom,"."),
                             font=("Damion", 20), bg='#41B77F')
-     label_info_solde.pack()
+    label_info_prenom.pack()
 
-     label_info_sexe = Label(frame, text=("Sexe:",compte.sexe,"."),
+    label_info_solde = Label(frame, text=("Solde:",compte.solde,"."),
                             font=("Damion", 20), bg='#41B77F')
-     label_info_sexe.pack()
+    label_info_solde.pack()
 
-     label_info_naissance = Label(frame, text=("Date de naissance:",compte.naiss,"."),
+    label_info_sexe = Label(frame, text=("Sexe:",compte.sexe,"."),
                             font=("Damion", 20), bg='#41B77F')
-     label_info_naissance.pack()
+    label_info_sexe.pack()
 
-     label_info_ID = Label(frame, text=("Identifiant du compte:", compte.idCompte, "."),
-                                  font=("Damion", 20), bg='#41B77F')
-     label_info_ID.pack()
+    label_info_naissance = Label(frame, text=("Date de naissance:",compte.naiss,"."),
+                            font=("Damion", 20), bg='#41B77F')
+    label_info_naissance.pack()
+
+    label_info_ID = Label(frame, text=("Identifiant du compte:", compte.idCompte, "."),
+                                    font=("Damion", 20), bg='#41B77F')
+    label_info_ID.pack()
 
 
-# fonction pour créer la page conenat les information sur le montant du compte
-def compte():
+# fonction pour créer la page contenant les information sur le montant du compte
+def info_compte():
     pass
 
 
@@ -419,16 +420,19 @@ def depense():
     button_envoie.pack()
 
 def verification():
+    global compte
+    compte = dblink.get_compte(ID)
     if var_ID.get() == "" or var_montant == "":
         messagebox.showerror("Erreur","Vous n'avez pas remplie tout les case")
     else:
         if not dblink.is_id_exist(var_ID.get()):
             messagebox.showerror("Erreur", "Le compte auquel vous voulez envoyé de l'argent n'existe pas")
         else:
-            if var_montant.get() > compte.solde:
+            if int(var_montant.get()) > compte.solde:
                 messagebox.showerror("Erreur","Vous ne possédez pas les fonds nécessaires")
             else:
-                dblink.virement(compte.IdCompte,var_ID, var_montant.get())
+                virement = dblink.virement(compte.idCompte,int(var_ID.get()), int(var_montant.get()))
+                print(virement)
                 messagebox.showinfo("Effectué","Le virement a bien été éffectué")
 
 
